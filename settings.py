@@ -1,0 +1,8 @@
+#CloudAPI version
+application_version = "v22.0"
+
+#access token
+token = "EAAJ8EJ2mCPYBOzcesReCZCy6X3SfgnjBtY7XrmFpMtM8Q1ZAoKyNWauSxiKEFbzk8w4qPMGwtvsBqyqBCXCw8ZBLamVSu9U4WbtiKxBzIzdNT0fsLW7mAojYpC8Blqgx8EtPvxLhVi7YLqYSkOh8m3euBWCft8ZA9OZBnRJft9h4Dxntx3ULxposPdObJ3QiQBgZAet3eLstOZA1J7uQAZASUrsZD"
+
+# Recipient contact number
+to_phone_number = "919676122148"
