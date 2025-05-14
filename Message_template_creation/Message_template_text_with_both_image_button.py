@@ -1,4 +1,7 @@
 from Whatsapp_CloudAPI_Template_creation import create_message_template
+from media_upload_api.image_upload_api import upload_image_to_server
+
+image_handle = upload_image_to_server()
 
 def msg_template_text_with_both_image_and_button():
 
@@ -11,9 +14,7 @@ def msg_template_text_with_both_image_and_button():
                 "type": "HEADER",
                 "format": "IMAGE",
                 "example": {
-                    "header_handle": [
-                        "https://bgcchecktest.s3.us-east-1.amazonaws.com/1/SampleJPGImage_200kbmb.jpg"
-                    ]
+                    "header_handle": [image_handle]
                 }
             },
             {

@@ -3,10 +3,10 @@ import requests
 import json
 
 #importing token from settings file
-from settings import application_version, token, to_phone_number
+from settings import api_version, phone_number_id, token, to_phone_number
 
-def send_whatsapp_message(phone_no_id):
-    url = f"https://graph.facebook.com/{application_version}/{phone_no_id}/messages"
+def send_whatsapp_message():
+    url = f"https://graph.facebook.com/{api_version}/{phone_number_id}/messages"
 
     headers = {
         "Authorization": f"Bearer {token}",
@@ -30,7 +30,6 @@ def send_whatsapp_message(phone_no_id):
     print("Status:", response.status_code)
     print("Response:", response.json())
 
-phone_number_id = '567853929754432'
 
-send_whatsapp_message(phone_number_id)
+send_whatsapp_message()
 
