@@ -8,8 +8,13 @@ def message_templates_list():
     headers = {
         "Authorization": f"Bearer {token}"
     }
-    response = requests.get(url, headers=headers)
-    templates = response.json()
-    return templates
 
-print(message_templates_list())
+    response = requests.get(url, headers=headers)
+    all_templates = response.json()["data"]
+
+    templates = []
+    for template_list in all_templates:
+        template_names = template_list["name"]
+        templates.append(template_names)
+
+    return templates

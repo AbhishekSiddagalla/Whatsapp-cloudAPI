@@ -3,7 +3,8 @@ import requests
 import json
 
 #importing token from settings file
-from settings import api_version, phone_number_id, token, to_phone_number
+from settings import api_version, token, to_phone_number
+from sender_phone_number.sender_phone_numbers_list import phone_number_id
 
 def send_whatsapp_message():
     url = f"https://graph.facebook.com/{api_version}/{phone_number_id}/messages"
@@ -27,9 +28,6 @@ def send_whatsapp_message():
 
     response = requests.post(url, headers=headers, data=json.dumps(payload))
 
-    print("Status:", response.status_code)
-    print("Response:", response.json())
+    return response
 
-
-send_whatsapp_message()
 
