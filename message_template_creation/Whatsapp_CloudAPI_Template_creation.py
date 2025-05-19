@@ -17,5 +17,3 @@ def create_message_template(payload):
 
     response = requests.post(url, headers=headers, data=json.dumps(payload))
     return response
-
-

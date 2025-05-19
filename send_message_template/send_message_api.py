@@ -1,18 +1,29 @@
 # api to call all the apis to send a message
 
-from Message_template_creation.templates_list_api import message_templates_list
-from send_message_template.Whatsapp_CloudAPI import send_whatsapp_message
+from message_template_creation.templates_list_api import MessageTemplateFetcher
+from send_message_template.Whatsapp_CloudAPI import WhatsAppMessageSender
 
-def send_message_api():
-    # to_phone_number = str(input("Enter Receiver's phone number:"))
+class WhatsAppMessageService:
+    def __init__(self):
+        self.template_list = []
 
-    template_list = message_templates_list()
-    print(template_list)
+    def fetch_template_names(self):
+        self.template_list = MessageTemplateFetcher().get_templates_list()
+        print("Available Templates:")
 
-    template_name = str(input("Enter template name from the above list:"))
+        for template in self.template_list:
+            print("-", template)
 
-    response = send_whatsapp_message()
-    if response.status_code == 200:
-        print(f"{template_name} Message sent successfully.")
+    def send_message_to_user(self):
+        self.fetch_template_names()
 
-send_message_api()
+        template_name = str(input("Enter template name from the above list:")).strip()
+        sender = WhatsAppMessageSender(template_name)
+
+        response = sender.send_message_to_user()
+        return response.json()
+
+send_message = WhatsAppMessageService().send_message_to_user()
+
+print("message sent successfully")
+print(send_message)
