@@ -2,7 +2,7 @@
 import requests
 import json
 
-#importing token from settings file
+from message_template_creation.templates_list_api import MessageTemplateFetcher
 from settings import api_version, token, to_phone_number
 from sender_phone_number.sender_phone_numbers_list import WhatsAppPhoneNumberFetcher
 
@@ -53,3 +53,27 @@ class WhatsAppMessageSender:
 
         response = requests.post(self.base_url, headers=headers, data=json.dumps(payload))
         return response
+
+class WhatsAppMessageService:
+    def __init__(self):
+        self.template_list = []
+
+    def fetch_template_names(self):
+        self.template_list = MessageTemplateFetcher().get_templates_list()
+        print("Available Templates:")
+
+        for template in self.template_list:
+            print("-", template)
+
+    def send_message_to_user(self):
+        self.fetch_template_names()
+
+        template_name = str(input("Enter template name from the above list:")).strip()
+        sender = WhatsAppMessageSender(template_name)
+
+        response = sender.send_message_to_user()
+        return response.json()
+
+send_message = WhatsAppMessageService().send_message_to_user()
+
+print("message sent successfully")
