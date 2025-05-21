@@ -3,7 +3,7 @@ import requests
 import json
 
 from message_template_creation.templates_list_api import MessageTemplateFetcher
-from settings import api_version, token, to_phone_number
+from settings import api_version, token, to_phone_number, sender_phone_number
 from sender_phone_number.sender_phone_numbers_list import WhatsAppPhoneNumberFetcher
 from media_upload_api.document_upload_api import WhatsAppMediaUploader
 
@@ -33,21 +33,8 @@ class WhatsAppMessageSender:
             "to": self.to_phone_number,
             "type": "template",
             "template": {
-                "name": "test_image_and_button",
+                "name": self.template_name,
                 "language": {"code": "en_US"},
-                "components": [
-                    {
-                        "type": "header",
-                        "parameters": [
-                            {
-                                "type": "image",
-                                "image": {
-                                    "id": media_id
-                                }
-                            }
-                        ]
-                    }
-                ]
             }
         }
 
@@ -63,22 +50,59 @@ class WhatsAppMessageSender:
 class WhatsAppMessageService:
     def __init__(self):
         self.template_list = []
+        self.sender_phone_number = sender_phone_number
+        self.to_phone_number = to_phone_number
 
     def fetch_template_names(self):
         self.template_list = MessageTemplateFetcher().get_templates_list()
         print("Available Templates:")
 
         for template in self.template_list:
-            print("-", template)
+            if template["status"] == "APPROVED":
+                print("-", template["name"], template["status"], template["category"],
+                      template["parameter_format"])
+
+        return self.template_list
 
     def send_message_to_user(self):
-        self.fetch_template_names()
+
+        all_templates = self.fetch_template_names()
+        template_list = [template_names["name"] for template_names in all_templates ]
 
         template_name = str(input("Enter template name from the above list:")).strip()
+
+        if template_name not in template_list:
+            return f"{template_name} is invalid. Please try again."
+        print()
+        print("senders phone number :",self.sender_phone_number)
+        print()
+        print("Recipient phone number :",self.to_phone_number)
+        print()
         sender = WhatsAppMessageSender(template_name)
 
         response = sender.send_message_to_user().json()
-        return response
+        return response,print("message sent successfully")
 
-send_message = WhatsAppMessageService().send_message_to_user()
-print(send_message)
+
+    def template_selection(self):
+        print("Welcome to WhatsApp Cloud API")
+        print("="*50)
+        print("Choose one of the following options:")
+        print("1. Create a new template")
+        print("2. Select from the approved template list")
+
+        user_choice = int(input("enter your choice:"))
+
+        if user_choice == 1:
+            pass
+        elif user_choice == 2:
+            return self.send_message_to_user()
+
+        return print("Invalid choice. Please try again.")
+
+
+send_message = WhatsAppMessageService().template_selection()
+
+
+
+

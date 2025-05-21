@@ -56,6 +56,7 @@ class HeaderHandle:
         self.file_name = media_file_path
         self.session_url = f"https://graph.facebook.com/v22.0/{session_id}"
 
+    @staticmethod
     def _get_headers(self):
         return {
             "Authorization": f"OAuth {token}",
