@@ -3,12 +3,12 @@
 import requests
 
 from settings import token, api_version
-from media_upload_api.image_upload_api import upload_image_to_server
+# from document_upload_api.media_upload_api import upload_image_to_server
 
-media_id = upload_image_to_server()
+# media_id = upload_image_to_server()
 
 def get_media_url():
-    url = f"https://graph.facebook.com/{api_version}/{media_id}"
+    url = f"https://graph.facebook.com/{api_version}/"#{media_id}"
 
     headers = {
         "Authorization": f"Bearer {token}",

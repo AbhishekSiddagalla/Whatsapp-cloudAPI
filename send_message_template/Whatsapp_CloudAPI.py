@@ -5,9 +5,11 @@ import json
 from message_template_creation.templates_list_api import MessageTemplateFetcher
 from settings import api_version, token, to_phone_number
 from sender_phone_number.sender_phone_numbers_list import WhatsAppPhoneNumberFetcher
+from media_upload_api.document_upload_api import WhatsAppMediaUploader
 
 phone_number_id = WhatsAppPhoneNumberFetcher().get_phone_number_id()
 
+media_id = WhatsAppMediaUploader().upload_document_to_server()
 
 class WhatsAppMessageSender:
     def __init__(self,template_name,template_params=None):
@@ -31,19 +33,23 @@ class WhatsAppMessageSender:
             "to": self.to_phone_number,
             "type": "template",
             "template": {
-                "name": self.template_name,
-                "language": {"code": "en_US"}
+                "name": "test_image_and_button",
+                "language": {"code": "en_US"},
+                "components": [
+                    {
+                        "type": "header",
+                        "parameters": [
+                            {
+                                "type": "image",
+                                "image": {
+                                    "id": media_id
+                                }
+                            }
+                        ]
+                    }
+                ]
             }
         }
-
-        # Only add components if there are parameters
-        if self.template_params:
-            payload["template"]["components"] = [
-                {
-                    "type": "body",
-                    "parameters": [{"type": "text", "text": param} for param in self.template_params]
-                }
-            ]
 
         return payload
 
@@ -71,9 +77,8 @@ class WhatsAppMessageService:
         template_name = str(input("Enter template name from the above list:")).strip()
         sender = WhatsAppMessageSender(template_name)
 
-        response = sender.send_message_to_user()
-        return response.json()
+        response = sender.send_message_to_user().json()
+        return response
 
 send_message = WhatsAppMessageService().send_message_to_user()
-
-print("message sent successfully")
+print(send_message)
