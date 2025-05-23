@@ -35,6 +35,18 @@ class WhatsAppMessageSender:
             "template": {
                 "name": self.template_name,
                 "language": {"code": "en_US"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {
+                                "type": "text",
+                                "parameter_name": "customer_name",
+                                "text": "Abhishek"
+                            }
+                        ]
+                    },
+                ]
             }
         }
 
@@ -73,6 +85,7 @@ class WhatsAppMessageService:
 
         if template_name not in template_list:
             return f"{template_name} is invalid. Please try again."
+
         print()
         print("senders phone number :",self.sender_phone_number)
         print()
@@ -81,7 +94,7 @@ class WhatsAppMessageService:
         sender = WhatsAppMessageSender(template_name)
 
         response = sender.send_message_to_user().json()
-        return response,print("message sent successfully")
+        return print(response)#,print("message sent successfully")
 
 
     def template_selection(self):
