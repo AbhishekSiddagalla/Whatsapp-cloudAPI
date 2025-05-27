@@ -28,6 +28,8 @@ class WhatsAppMessageSender:
         }
 
     def _get_payload(self):
+        body_params = self.template_params
+
         payload = {
             "messaging_product": "whatsapp",
             "to": self.to_phone_number,
@@ -38,13 +40,7 @@ class WhatsAppMessageSender:
                 "components": [
                     {
                         "type": "body",
-                        "parameters": [
-                            {
-                                "type": "text",
-                                "parameter_name": "customer_name",
-                                "text": "Abhishek"
-                            }
-                        ]
+                        "parameters": body_params
                     },
                 ]
             }
@@ -86,15 +82,33 @@ class WhatsAppMessageService:
         if template_name not in template_list:
             return f"{template_name} is invalid. Please try again."
 
-        print()
-        print("senders phone number :",self.sender_phone_number)
-        print()
-        print("Recipient phone number :",self.to_phone_number)
-        print()
-        sender = WhatsAppMessageSender(template_name)
+        # Get selected template details
+        selected_template = next(template for template in all_templates if template["name"] == template_name)
 
+        # Extract parameter names from the 'body_text_named_params'
+        body_component = next((component for component in selected_template["components"] if comp["type"] == "BODY"), None)
+
+        if not body_component or "example" not in body_component or "body_text_named_params" not in body_component[
+            "example"]:
+            return print("Template doesn't have proper named parameter examples. Please check template configuration.")
+
+        #Fetching Parameter names
+        named_params = body_component["example"]["body_text_named_params"]
+        print(f"Template '{template_name}' expects the following parameters:")
+
+        template_params = []
+        for param in named_params:
+            param_name = param["param_name"]
+            value = input(f"Enter value for '{param_name}': ").strip()
+            template_params.append({"type": "text", "parameter_name": param_name, "text": value})
+
+        print("\nSender phone number:", self.sender_phone_number)
+        print("Recipient phone number:", self.to_phone_number)
+
+        sender = WhatsAppMessageSender(template_name, template_params)
         response = sender.send_message_to_user().json()
-        return print(response)#,print("message sent successfully")
+
+        return print(response)
 
 
     def template_selection(self):
