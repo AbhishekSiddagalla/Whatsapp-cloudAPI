@@ -1,6 +1,7 @@
 #fetching media id by uploading media to the server
 import os
 import requests
+import mimetypes
 
 from settings import api_version, phone_number_id, token, media_file_path, app_id,fb_app_access_token
 
@@ -19,15 +20,23 @@ class WhatsAppMediaUploader:
             "Authorization": f"Bearer {self.token}"
         }
 
-    def upload_document_to_server(self):
+    def upload_media_to_server(self, header_type="document", **kwargs):
         headers = self._get_headers()
 
         data = {
             "messaging_product": "whatsapp",
+            "type": header_type
         }
+
+        mime_map = {
+            "image": "image/jpeg",
+            "video": "video/mp4",
+            "document": "application/pdf"
+        }
+
         with open(media_file_path, 'rb') as media_file:
             files = {
-                'file': ('order.png', media_file,'application/pdf')
+                'file': (media_file_path.split('/')[-1], media_file, mime_map.get(header_type))
             }
             response = requests.post(self.base_url, headers=headers, files=files, data=data).json()
             return response.get("id")

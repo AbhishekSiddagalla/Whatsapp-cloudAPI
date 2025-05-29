@@ -25,6 +25,6 @@ class MessageTemplateFetcher:
 
         response = requests.get(self.base_url, headers=self._get_headers(self), params=params).json()
         all_templates = response["data"]
-        # print(all_templates)
+        print(all_templates)
 
         return all_templates

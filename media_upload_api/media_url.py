@@ -3,9 +3,9 @@
 import requests
 
 from settings import token, api_version
-# from document_upload_api.media_upload_api import upload_image_to_server
+from media_upload_api.media_uploader import WhatsAppMediaUploader
 
-# media_id = upload_image_to_server()
+media_id = WhatsAppMediaUploader().upload_media_to_server()
 
 def get_media_url():
     url = f"https://graph.facebook.com/{api_version}/"#{media_id}"
