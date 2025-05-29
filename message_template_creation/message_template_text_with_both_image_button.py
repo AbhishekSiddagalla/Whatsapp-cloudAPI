@@ -1,5 +1,5 @@
-from Whatsapp_CloudAPI_Template_creation import create_message_template
-from media_upload_api.document_upload_api import HeaderHandle
+from whatsapp_cloudapi_template_creation import create_message_template
+from media_upload_api.media_uploader import HeaderHandle
 
 handle_value = HeaderHandle()
 header_handle = handle_value.get_header_handle()

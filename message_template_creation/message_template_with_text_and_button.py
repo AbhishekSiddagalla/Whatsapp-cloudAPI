@@ -1,4 +1,4 @@
-from Whatsapp_CloudAPI_Template_creation import create_message_template
+from whatsapp_cloudapi_template_creation import create_message_template
 
 def msg_template_with_text_and_button():
 

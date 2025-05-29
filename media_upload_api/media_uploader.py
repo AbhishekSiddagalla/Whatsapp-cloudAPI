@@ -27,7 +27,7 @@ class WhatsAppMediaUploader:
         }
         with open(media_file_path, 'rb') as media_file:
             files = {
-                'file': ('order.png', media_file,'image/png')
+                'file': ('order.png', media_file,'application/pdf')
             }
             response = requests.post(self.base_url, headers=headers, files=files, data=data).json()
             return response.get("id")
@@ -63,7 +63,7 @@ class HeaderHandle:
             "file_offset": "0"
         }
     def get_header_handle(self):
-        headers = self._get_headers()
+        headers = self._get_headers(self)
         with open(self.file_name, 'rb') as media_file:
             files = {
                 'file': ('order.png', media_file,'image/png')
