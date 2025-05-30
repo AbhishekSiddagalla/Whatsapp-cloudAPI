@@ -1,20 +1,20 @@
 # fetching all message template names
 import requests
 
-from settings import api_version, whatsapp_business_account_id, token
+from settings import api_version, whatsapp_business_account_id, api_access_token
 
 
 class MessageTemplateFetcher:
     def __init__(self):
         self.api_version = api_version
         self.business_account_id = whatsapp_business_account_id
-        self.token = token
+        self.token = api_access_token
         self.base_url = f"https://graph.facebook.com/{self.api_version}/{self.business_account_id}/message_templates"
 
     @staticmethod
     def _get_headers(self):
         return {
-        "Authorization": f"Bearer {token}",
+        "Authorization": f"Bearer {self.token}",
         "Content-Type": "application/json"
         }
 
@@ -25,6 +25,6 @@ class MessageTemplateFetcher:
 
         response = requests.get(self.base_url, headers=self._get_headers(self), params=params).json()
         all_templates = response["data"]
-        print(all_templates)
+        # print(all_templates)
 
         return all_templates

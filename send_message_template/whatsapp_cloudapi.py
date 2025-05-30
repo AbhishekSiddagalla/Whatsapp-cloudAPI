@@ -2,24 +2,26 @@ import requests
 import json
 
 from message_template_creation.templates_list_api import MessageTemplateFetcher
-from settings import api_version, token, to_phone_number
+from settings import api_version, api_access_token, to_phone_number
 from sender_phone_number.sender_phone_numbers_list import WhatsAppPhoneNumberFetcher
 from media_upload_api.media_uploader import WhatsAppMediaUploader
-from message_template_payload import header_payload
+from send_message_template.message_template_payload import header_payload, buttons_payload
 
 phone_number_id = WhatsAppPhoneNumberFetcher().get_phone_number_id()
 
 
 class WhatsAppMessageSender:
-    def __init__(self, template_name, template_params=None, header_text=None):
+    def __init__(self, template_name, template_params=None, header_text=None, header_type=None, media_id=None):
         self.template_list = []
         self.header_text = header_text
         self.api_version = api_version
         self.phone_number_id = phone_number_id
-        self.token = token
+        self.token = api_access_token
         self.to_phone_number = to_phone_number
         self.template_name = template_name
         self.template_params = template_params or []
+        self.header_type = header_type
+        self.media_id = media_id
         self.base_url = f"https://graph.facebook.com/{self.api_version}/{self.phone_number_id}/messages"
 
     # fetching all message templates list
@@ -41,13 +43,20 @@ class WhatsAppMessageSender:
 
         template_list = self.fetch_templates()
         selected_template = next((template for template in template_list if template["name"] == self.template_name),None)
-
         header_type = None
+        button_type = None
         if selected_template:
+            # Extract the header type from the template components
             header_component = next((c for c in selected_template.get("components", []) if c["type"].upper() == "HEADER"), None)
+            # Extract the button type from the template components
+            buttons_component = next((c for c in selected_template.get("components", []) if c["type"].upper() == "BUTTONS"), None)
+
             if header_component:
                 header_format = header_component.get("format").lower()
                 header_type = header_format
+
+            if buttons_component:
+                button_type = buttons_component.get("type").lower()
 
         # Build header parameters based on the detected header type
         header_params = []
@@ -78,6 +87,9 @@ class WhatsAppMessageSender:
 
         button_params = []
 
+        if button_type in ["url", "phone_number"]:
+            button_params = buttons_payload.get(button_type)
+
         components = []
         #message template Header Part
         if header_params:
@@ -92,9 +104,10 @@ class WhatsAppMessageSender:
                 "parameters": body_params
             })
 
+
         if button_params:
-            components.extend({
-                "type": "button",
+            components.append({
+                "type": "buttons",
                 "sub_type": "PHONE_NUMBER",
                 "parameters": button_params
             })

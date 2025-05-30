@@ -10,7 +10,7 @@ api_version = "v22.0"
 whatsapp_business_account_id = "1740776970130492"
 
 #access token
-
+api_access_token = ""
 # Sender contact number
 sender_phone_number = "15556423110"
 

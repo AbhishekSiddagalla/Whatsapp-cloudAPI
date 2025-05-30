@@ -3,14 +3,14 @@ import os
 import requests
 import mimetypes
 
-from settings import api_version, phone_number_id, token, media_file_path, app_id,fb_app_access_token
+from settings import api_version, phone_number_id, api_access_token, media_file_path, app_id,fb_app_access_token
 
 
 class WhatsAppMediaUploader:
     def __init__(self):
         self.api_version = api_version
         self.phone_number_id = phone_number_id
-        self.token = token
+        self.token = api_access_token
         self.app_id = app_id
         self.fb_app_access_token = fb_app_access_token
         self.base_url = f"https://graph.facebook.com/{self.api_version}/{self.phone_number_id}/media"
@@ -45,7 +45,7 @@ class WhatsAppMediaUploadSession:
     def __init__(self):
         self.api_version = api_version
         self.app_id = app_id
-        self.token = token
+        self.token = api_access_token
         self.file_name = media_file_path
         self.file_length = os.path.getsize(media_file_path)
         self.file_type = "image/jpg"
@@ -68,7 +68,7 @@ class HeaderHandle:
     @staticmethod
     def _get_headers(self):
         return {
-            "Authorization": f"OAuth {token}",
+            "Authorization": f"OAuth {api_access_token}",
             "file_offset": "0"
         }
     def get_header_handle(self):

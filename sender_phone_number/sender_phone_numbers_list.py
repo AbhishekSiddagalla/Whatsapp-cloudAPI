@@ -1,6 +1,6 @@
 import requests
 
-from settings import api_version, whatsapp_business_account_id, token, sender_phone_number
+from settings import api_version, whatsapp_business_account_id, api_access_token, sender_phone_number
 
 # fetching all sender's phone numbers
 
@@ -8,7 +8,7 @@ class WhatsAppPhoneNumberFetcher:
     def __init__(self):
         self.api_version = api_version
         self.whatsapp_business_account_id = whatsapp_business_account_id
-        self.token = token
+        self.token = api_access_token
         self.base_url = f"https://graph.facebook.com/{self.api_version}/{self.whatsapp_business_account_id}/phone_numbers"
         self.sender_phone_number = sender_phone_number
 

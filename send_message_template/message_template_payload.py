@@ -33,11 +33,11 @@ buttons_payload = {
     "phone_number": {
         "type": "PHONE_NUMBER",
         "text": "Phone Number",
-        "phone_number": "9676122148"
+        "phone_number": "1234567890"
     },
     "url": {
         "type": "URL",
         "text": "Website",
-        "url": "https://www.google.com"
+        "url": "https://www.facebook.com"
     }
 }
