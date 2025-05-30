@@ -33,11 +33,11 @@ buttons_payload = {
     "phone_number": {
         "type": "PHONE_NUMBER",
         "text": "Phone Number",
-        "phone_number": str(input("Enter Phone Number to add in the message button:"))
+        "phone_number": "9676122148"
     },
     "url": {
         "type": "URL",
         "text": "Website",
-        "url": str(input("Enter URL to add in the message button:"))
+        "url": "https://www.google.com"
     }
 }
