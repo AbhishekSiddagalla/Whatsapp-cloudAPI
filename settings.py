@@ -11,7 +11,7 @@ whatsapp_business_account_id = "1740776970130492"
 
 #access token
 
-api_access_token = "EAAJ8EJ2mCPYBO0jivR7nyfTBqeZCtd85g6RcFcjiydXcj7QAk0yOLUc9Peq6NPewJZCZAarZBFx1yQPNETvNih89YPbTGMxzMfCI7cJ6js1FwSqi5QmgPeTjXFenwBzlnFLxbpHldCAKbPXjYAj7DPHVNuXYzpyJ10UMoZCSJ0tONPIzLAok0O8hdymLGVV2UzMCO44xMdg6I52LvHvi9bpjWzAK9WkgZD"
+api_access_token = ""
 
 # Sender contact number
 sender_phone_number = "15556423110"
