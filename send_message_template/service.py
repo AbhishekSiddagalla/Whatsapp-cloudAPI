@@ -27,11 +27,14 @@ class WhatsAppMessageService:
 
         # fetching template name from the template list
         selected_template = next(template for template in all_templates if template["name"] == template_name)
-        print(selected_template)
+
+        header_part = next((c for c in selected_template["components"] if c["type"] == "HEADER"), None)
         # getting the body component from the selected template
         body_component = next((component for component in selected_template["components"] if component["type"] == "BODY"), None)
 
-        print("Message preview:\n", body_component["text"])
+        print("Message preview:\n")
+        print(header_part["text"])
+        print(body_component["text"])
 
         placeholder_count = body_component["text"].count("{{")
 
@@ -42,20 +45,41 @@ class WhatsAppMessageService:
                 user_input = input("Enter placeholder {%d} :" %i).strip()
                 placeholders.append(user_input)
 
-        print("\nSender phone number:", self.sender_phone_number)
-        print("Recipient phone number:", self.to_phone_number)
 
-        header_part = next((c for c in selected_template["components"]if c["type"] == "HEADER"),None)
 
-        # print(header_part["text"])
 
-        sender = WhatsAppMessageSender(
-                        template_name=template_name,
-                        template_params= [{"type": "text", "text": value} for value in placeholders]
-                                       )
+        print("\nThe message you want to send is \n")
+        if header_part["format"] == "TEXT":
+            print(header_part["text"])
 
-        response = sender.send_message_to_user().json()
-        return print(response)
+        filled_message = body_component["text"]
+        for i,value in enumerate(placeholders,start=1):
+            filled_message = filled_message.replace(f"{{{{{i}}}}}",value)
+        print(filled_message)
+
+        print()
+
+        user_input_confirmation = input("Enter 'YES' to send the message or enter 'NO' to cancel:")
+
+        if user_input_confirmation.lower() == "no":
+            return print("Restart the process.")
+
+        elif user_input_confirmation.lower() == "yes":
+            print("\nSender phone number:", self.sender_phone_number)
+            print("Recipient phone number:", self.to_phone_number)
+
+
+
+
+            sender = WhatsAppMessageSender(
+                            template_name=template_name,
+                            template_params= placeholders
+                                           )
+
+            response = sender.send_message_to_user().json()
+            return print(response)
+        return None
+
 
     def template_selection(self):
         print("Welcome to WhatsApp Cloud API")

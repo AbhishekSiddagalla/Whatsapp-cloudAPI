@@ -66,6 +66,8 @@ class WhatsAppMessageSender:
 
         # Build header parameters based on the detected header type
         header_params = []
+        button_params = []
+
         if header_type in ["image", "video", "document"]:
             # Get the file path from header_payload
             media_file = header_payload.get(header_type)
@@ -84,16 +86,16 @@ class WhatsAppMessageSender:
 
             # Handle text headers separately
             elif header_type == "text":
-                # Only add header text if it contains {{ placeholders }}
-                if header_component and "{{" in header_component.get("text", ""):
+                if header_component :
                     text_value = header_payload.get("text")
                     if text_value:
                         header_params.append({
                             "type": "text",
                             "text": text_value
                         })
+            else:
+                header_params = []
 
-        button_params = []
 
         if button_type in ["url", "phone_number"]:
             button_params = buttons_payload.get(button_type)
@@ -130,7 +132,6 @@ class WhatsAppMessageSender:
                 "components": components
             }
         }
-
         return payload
 
     def send_message_to_user(self):
