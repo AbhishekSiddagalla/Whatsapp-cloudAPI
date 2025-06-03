@@ -26,7 +26,7 @@ def msg_template_with_text_and_button():
                     {
                         "type": "URL",
                         "text": "Track Order",
-                        "url": "https://www.google.com"
+                        "url": "https://www.facebook.com"
                     }
                 ]
             }

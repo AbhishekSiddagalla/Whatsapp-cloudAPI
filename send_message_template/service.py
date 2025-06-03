@@ -27,17 +27,32 @@ class WhatsAppMessageService:
 
         # fetching template name from the template list
         selected_template = next(template for template in all_templates if template["name"] == template_name)
-
+        print(selected_template)
         # getting the body component from the selected template
         body_component = next((component for component in selected_template["components"] if component["type"] == "BODY"), None)
 
-        print("Message preview:\n\n", body_component["text"])
+        print("Message preview:\n", body_component["text"])
+
+        placeholder_count = body_component["text"].count("{{")
+
+        placeholders = []
+        if placeholder_count > 0:
+            print("\nEnter values for the following placeholders:")
+            for i in range(1,placeholder_count + 1):
+                user_input = input("Enter placeholder {%d} :" %i).strip()
+                placeholders.append(user_input)
 
         print("\nSender phone number:", self.sender_phone_number)
         print("Recipient phone number:", self.to_phone_number)
 
+        header_part = next((c for c in selected_template["components"]if c["type"] == "HEADER"),None)
 
-        sender = WhatsAppMessageSender(template_name=template_name)
+        # print(header_part["text"])
+
+        sender = WhatsAppMessageSender(
+                        template_name=template_name,
+                        template_params= [{"type": "text", "text": value} for value in placeholders]
+                                       )
 
         response = sender.send_message_to_user().json()
         return print(response)
