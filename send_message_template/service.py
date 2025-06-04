@@ -27,13 +27,19 @@ class WhatsAppMessageService:
 
         # fetching template name from the template list
         selected_template = next(template for template in all_templates if template["name"] == template_name)
+        print(selected_template)
 
         header_part = next((c for c in selected_template["components"] if c["type"] == "HEADER"), None)
         # getting the body component from the selected template
         body_component = next((component for component in selected_template["components"] if component["type"] == "BODY"), None)
 
         print("Message preview:\n")
-        print(header_part["text"])
+
+        if header_part["format"] == "TEXT":
+            print(header_part["text"])
+
+        else:
+            print(header_part["format"])
         print(body_component["text"])
 
         placeholder_count = body_component["text"].count("{{")
@@ -45,16 +51,16 @@ class WhatsAppMessageService:
                 user_input = input("Enter placeholder {%d} :" %i).strip()
                 placeholders.append(user_input)
 
-
-
-
         print("\nThe message you want to send is \n")
         if header_part["format"] == "TEXT":
             print(header_part["text"])
 
+        elif header_part["format"] in ["image","video","document"]:
+            print("media_link:")
+
         filled_message = body_component["text"]
         for i,value in enumerate(placeholders,start=1):
-            filled_message = filled_message.replace(f"{{{{{i}}}}}",value)
+            filled_message = filled_message.replace("{{%d}}" %i, value)
         print(filled_message)
 
         print()
@@ -67,9 +73,6 @@ class WhatsAppMessageService:
         elif user_input_confirmation.lower() == "yes":
             print("\nSender phone number:", self.sender_phone_number)
             print("Recipient phone number:", self.to_phone_number)
-
-
-
 
             sender = WhatsAppMessageSender(
                             template_name=template_name,

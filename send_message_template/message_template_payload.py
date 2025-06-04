@@ -37,7 +37,6 @@ buttons_payload = {
     },
     "url": {
         "type": "URL",
-        "text": "Website",
-        "url": "https://www.facebook.com"
+        "text": "URL",
     }
 }

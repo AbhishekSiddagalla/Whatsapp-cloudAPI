@@ -49,27 +49,21 @@ class WhatsAppMessageSender:
         header_component = None
 
         if selected_template:
-            # Extract the header type from the template components
             header_component = next((c for c in selected_template.get("components", []) if c["type"].upper() == "HEADER"), None)
-            #Extract the body type from the template components
             body_component = next((c for c in selected_template.get("components", []) if c["type"].upper() == "BODY"),None)
-            # Extract the button type from the template components
             buttons_component = next((c for c in selected_template.get("components", []) if c["type"].upper() == "BUTTONS"), None)
 
             if header_component:
-                header_format = header_component.get("format").lower()
+                header_format = header_component.get("format", "").lower()
                 header_type = header_format
 
             if buttons_component:
-                if "buttons" in buttons_component :
-                    button_type = buttons_component["buttons"][0].get("type", "").lower()
+                button_type = buttons_component.get("buttons", [{}])[0].get("type", "").lower()
 
-        # Build header parameters based on the detected header type
         header_params = []
         button_params = []
 
         if header_type in ["image", "video", "document"]:
-            # Get the file path from header_payload
             media_file = header_payload.get(header_type)
             if media_file:
                 media_id = WhatsAppMediaUploader().upload_media_to_server(
@@ -84,42 +78,27 @@ class WhatsAppMessageSender:
                         }
                     })
 
-            # Handle text headers separately
-            elif header_type == "text":
-                if header_component :
-                    text_value = header_payload.get("text")
-                    if text_value:
-                        header_params.append({
-                            "type": "text",
-                            "text": text_value
-                        })
-            else:
-                header_params = []
-
-
-        if button_type in ["url", "phone_number"]:
-            button_params = buttons_payload.get(button_type)
+        elif header_type == "text":
+            if header_component and "{{" in header_component.get("text",""):
+                text_value = header_payload.get("text")
+                if text_value:
+                    header_params.append({
+                        "type": "text",
+                        "text": text_value["text"]
+                    })
 
         components = []
-        #message template Header Part
+
         if header_params:
             components.append({
                 "type": "header",
                 "parameters": header_params
             })
-        #message template Body part
+
         if body_params:
             components.append({
                 "type": "body",
                 "parameters": body_params
-            })
-
-        #message template Buttons part
-        if button_params:
-            components.append({
-                "type": "BUTTON",
-                "sub_type": button_type.upper(),
-                "parameters": button_params
             })
 
         payload = {
@@ -132,6 +111,8 @@ class WhatsAppMessageSender:
                 "components": components
             }
         }
+
+        print(payload)
         return payload
 
     def send_message_to_user(self):
