@@ -23,7 +23,7 @@ phone_number_id = "567853929754432"
 to_phone_number = "+919676122148"
 
 #media uploading for the header of the template
-media_file_path = "C:\\Users\AbhishekSiddagalla\my_tasks\Whatsapp_cloudAPI\order.png"
+media_file_path = "C:\\Users\\AbhishekSiddagalla\\my_tasks\\Whatsapp_cloudAPI\\order.png"
 
 # fb app = app-id|app-secret
 fb_app_access_token = "699360759646454|a10e33a4600cddc79e0d9226ae65d2ec"
