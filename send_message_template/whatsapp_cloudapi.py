@@ -24,7 +24,7 @@ class WhatsAppMessageSender:
         self.media_id = media_id
         self.base_url = f"https://graph.facebook.com/{self.api_version}/{self.phone_number_id}/messages"
 
-    # fetching all message templates from template list
+    # fetching all message templates from the template list
     def fetch_templates(self):
         self.template_list = MessageTemplateFetcher().get_templates_list()
 
@@ -61,7 +61,6 @@ class WhatsAppMessageSender:
                 button_type = buttons_component.get("buttons", [{}])[0].get("type", "").lower()
 
         header_params = []
-        button_params = []
 
         if header_type in ["image", "video", "document"]:
             media_file = header_payload.get(header_type)
