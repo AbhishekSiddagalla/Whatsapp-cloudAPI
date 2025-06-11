@@ -1,7 +1,6 @@
 #fetching media id by uploading media to the server
 import os
 import requests
-import mimetypes
 
 from settings import api_version, phone_number_id, api_access_token, media_file_path, app_id,fb_app_access_token
 
